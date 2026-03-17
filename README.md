@@ -4,7 +4,7 @@ You can get instructions in the tool.
 
 🐞🪲🪳🐛🪱🦗🐜🦟   👈👀
 
-            ⬇️
+⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️
 
 📞✉:shenglinnn
 osu!/discord: shenglinnn

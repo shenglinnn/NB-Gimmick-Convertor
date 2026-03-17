@@ -2,8 +2,6 @@
 A simple osu!taiko gimmick mapping tool.
 You can get instructions in the tool.
 
-🐞🪲🪳🐛🪱🦗🐜🦟 👈👀
-⬇️
-📞✉:shenglinnn
+🐞🪲🪳🐛🪱🦗🐜🦟  👈👀  ➡️  📞✉:shenglinnn
 osu!/discord: shenglinnn
 ❤

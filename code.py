@@ -105,7 +105,7 @@ Note: In the settings, using the default values is usually sufficient. If you wa
 5. \"Adjust SV\" is used for live performance type maps, this function operates on the whole map. All the existing green lines will be cleared, and new green lines will be inserted on each red lines (only BPM from 1 ~ 1,000,000 are included). This method ensures that the speed of all objects is consistent, according to the base BPM.\n
 6. Click \"GO!\" to execute.\n'''
 summon_help_str1 = """\nGenerate Help\n
-This area allows you to generate objects from the combo box at a specific time point. Please fill in the time point before use.\n
+This area allows you to generate objects from the combo box at a specific time point. Please fill in the time point before use. You can also add notes to the list on the left. The time point for each note will be added to the object you selected. At this time, please clear the filled-in time point, otherwise it will be executed according to the filled-in time point (all selected yellow sliders and spinners will be skipped), Also, remember to fill in the offset time, otherwise the original object will be overwritten.\n
 1. Yellow: The slider head.。\n
 2. Negative Yellow Slider: The slider end and middle are in the front.\n
 3. Static Yellow Note: Utilize game features to make the slider display statically during gameplay, usually requiring the use of custom skins to remove the slider middle and end. Please refer to the image below for length and snapping filling methods, leave the multiplier blank to use 1.\n"""
@@ -147,7 +147,7 @@ reload_OK = 'Reloaded!'
 Generate_folder = 'Complete! Please check your map folder.'
 skin_added = 'Added! A skin folder has been generated within the current map folder, and you are free to use it as you please!'
 
-gtime_not_filled = 'Please fill the time point.'
+gtime_not_filled = 'Please fill the time point or select some notes.'
 gtime_not_correct = 'The time format is incorrect, you can directly copy the time point in the game and paste it here.'
 scale_value_not_fill = 'Please fill the length / snapping.'
 info_time = 'Time point: '
@@ -166,7 +166,7 @@ def CN():
     global window_now_selected, window_choose_file, window_range, window_no_new_diff, window_careful, window_no_new_diff_suggest, window_add_objects, window_objects_clear, window_gimmick_title, window_choose_gimmick, window_d, window_k, window_D, window_K, window_use_custom_bpm, window_gimmick_GO, window_gimmick_help, window_lines_title, window_lines_method, window_value_change, window_red_settings, window_default, window_lines_GO, window_lines_help
     global font1, font_warning, font2, font3, font_clear, font_language
     global volume_not_full, volume_range_not_correct, base_bpm_not_filled, base_bpm_big, base_bpm_small
-    global window_summon_title, window_rhythm_text, window_rhythm1_text, window_yellow_timing, window_summon_GO, window_summon_help, window_summon_Info, window_minus1_text, window_big_yellow_text, window_multiplier_text, window_reload_text, window_skin_file_text
+    global window_summon_title, window_rhythm_text, window_yellow_timing, window_summon_GO, window_summon_help, window_summon_Info, window_minus1_text, window_big_yellow_text, window_multiplier_text, window_reload_text, window_skin_file_text
     global gtime_not_filled, gtime_not_correct, scale_value_not_fill, info_time, info_bpm, info_beatlen, info_sv, info_slidermultiplier, info_11_len, info_14_len, info_13_len, info_15_len, info_17_len
     global reload_OK, Generate_folder, skin_added
 
@@ -212,7 +212,7 @@ def CN():
 5.统一流速：用于生演奏谱面，本功能作用于全图。原本已有的所有绿线会被全部清除，并在每根红线处添加一条绿线（仅在BPM在1 ~ 1,000,000处插入）。通过这种方法，使所有物件的流速一致，基于基准BPM。\n
 6.点击『走你~』执行。\n'''
     summon_help_str1 = """\n生成区Help\n
-该区域可以帮你在某一时间点生成选单里的物件，使用前请先填写时间点。\n
+该区域可以帮你生成选单里的物件，使用前请先填写时间点。也可以在左侧列表添加note，每个note所在的时间点都会添加你选择的物件，此时请清空填入的时间点，否则会按照填入的时间点执行（所有选择的黄条和转盘都会被略过），还有记得填入偏移时间，否则原物件会被覆盖。\n
 1.黄点：即滑条头。\n
 2.负长度黄条：尾巴和身体在头的前面。\n
 3.静态黄点：利用游戏特性，使滑条在游玩中静态显示，通常需要配合自定义皮肤，去除身体和尾巴使用，滑条长度和节拍填写方法请参照下图，长度乘数不填默认为 1。\n"""
@@ -254,7 +254,7 @@ def CN():
     base_bpm_big = '基础 BPM 太大啦，最大不能超过 1,000,000 哦~'
     base_bpm_small = '基础 BPM 太小啦，最小不能小于 1 呢~'
 
-    gtime_not_filled = '先填入时间点吧~'
+    gtime_not_filled = '先填入时间点或者选择一些note吧~'
     gtime_not_correct = '时间格式有误，你可以直接在游戏中复制时间点然后粘贴在这里哦（￣︶￣）'
     scale_value_not_fill = '滑条长度 / 节拍还没写呢~'
     info_time = '时间点：'
@@ -309,7 +309,6 @@ def CN():
 
     window_summon_title.set('生成区')
     window_rhythm_text.set('滑条长度 / 节拍：')
-    window_rhythm1_text.set(' / ')
     # window_yellow_bpm = tk.StringVar(value='BPM：')
     # window_yellow_sv = tk.StringVar(value='SV：')
     # window_length_text = tk.StringVar(value='长度：')
@@ -335,7 +334,7 @@ def EN():
     global window_now_selected, window_choose_file, window_range, window_no_new_diff, window_careful, window_no_new_diff_suggest, window_add_objects, window_objects_clear, window_gimmick_title, window_choose_gimmick, window_d, window_k, window_D, window_K, window_use_custom_bpm, window_gimmick_GO, window_gimmick_help, window_lines_title, window_lines_method, window_value_change, window_red_settings, window_default, window_lines_GO, window_lines_help
     global font1, font_warning, font2, font3, font_clear, font_language
     global volume_not_full, volume_range_not_correct, base_bpm_not_filled, base_bpm_big, base_bpm_small
-    global window_summon_title, window_rhythm_text, window_rhythm1_text, window_yellow_timing, window_summon_GO, window_summon_help, window_summon_Info, window_minus1_text, window_big_yellow_text, window_multiplier_text, window_reload_text, window_skin_file_text
+    global window_summon_title, window_rhythm_text, window_yellow_timing, window_summon_GO, window_summon_help, window_summon_Info, window_minus1_text, window_big_yellow_text, window_multiplier_text, window_reload_text, window_skin_file_text
     global gtime_not_filled, gtime_not_correct, scale_value_not_fill, info_time, info_bpm, info_beatlen, info_sv, info_slidermultiplier, info_11_len, info_14_len, info_13_len, info_15_len, info_17_len
     global reload_OK, Generate_folder, skin_added
 
@@ -382,7 +381,7 @@ Note: In the settings, using the default values is usually sufficient. If you wa
 5. \"Adjust SV\" is used for live performance type maps, this function operates on the whole map. All the existing green lines will be cleared, and new green lines will be inserted on each red lines (only BPM from 1 ~ 1,000,000 are included). This method ensures that the speed of all objects is consistent, according to the base BPM.\n
 6. Click \"GO!\" to execute.\n'''
     summon_help_str1 = """\nGenerate Help\n
-This area allows you to generate objects from the combo box at a specific time point. Please fill in the time point before use.\n
+This area allows you to generate objects from the combo box at a specific time point. Please fill in the time point before use. You can also add notes to the list on the left. The time point for each note will be added to the object you selected. At this time, please clear the filled-in time point, otherwise it will be executed according to the filled-in time point (all selected yellow sliders and spinners will be skipped), Also, remember to fill in the offset time, otherwise the original object will be overwritten.\n
 1. Yellow: The slider head.。\n
 2. Negative Yellow Slider: The slider end and middle are in the front.\n
 3. Static Yellow Note: Utilize game features to make the slider display statically during gameplay, usually requiring the use of custom skins to remove the slider middle and end. Please refer to the image below for length and snapping filling methods, leave the multiplier blank to use 1.\n"""
@@ -424,7 +423,7 @@ Note: Functions 2 and 3 are more advanced, and it is recommended to use them aft
     Generate_folder = 'Complete! Please check your map folder.'
     skin_added = 'Added! A skin folder has been generated within the current map folder, and you are free to use it as you please!'
 
-    gtime_not_filled = 'Please fill the time point.'
+    gtime_not_filled = 'Please fill the time point or select some notes.'
     gtime_not_correct = 'The time format is incorrect, you can directly copy the time point in the game and paste it here.'
     scale_value_not_fill = 'Please fill the length / snapping.'
     info_time = 'Time point: '
@@ -479,7 +478,6 @@ Note: Functions 2 and 3 are more advanced, and it is recommended to use them aft
 
     window_summon_title.set('Generate')
     window_rhythm_text.set('Length / Snapping: ')
-    window_rhythm1_text.set(' / ')
     # window_yellow_bpm = tk.StringVar(value='BPM：')
     # window_yellow_sv = tk.StringVar(value='SV：')
     # window_length_text = tk.StringVar(value='长度：')
@@ -696,6 +694,14 @@ def validate_input4(new_value):
         return True
     else:
         return False
+
+def validate_input5(P):
+    if P == "": return True
+    if re.fullmatch(r"^-?\d{0,4}$", P):
+        if P == "-": return True
+        return -9999 <= int(P) <= 9999
+    
+    return False
 
 # 插线区 红线设置 输入框
 def red_setting_entry(event):
@@ -1355,6 +1361,10 @@ def fuck():
                             cur_timing = timing
                         else:
                             break
+                    # 以防有人在开头搞()
+                    if cur_timing == '':
+                        cur_timing = TimingPoints[0]
+                    
                     cur_timing = cur_timing.split(',')
                     if kiai_mode == 0:
                         New_TimingPoints_Green.append(','.join([str(i)] + [str((-100) / ((value_add * add_times) + value_from))] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['0'] + (['0\n'] if int(cur_timing[7]) in [0, 8] else ['1\n'])))
@@ -1445,7 +1455,7 @@ def fuck():
                 if auto_volume == False:
                     volume_add = float((int(volume_to) - int(volume_from)) / ((end_convert - start_convert - 2) / interval))
                 add_times = 0
-                for i in range(start_convert + 1, end_convert - 1, interval):
+                for i in range(start_convert, end_convert, interval):
                     cur_timing = ''
                     for timing in TimingPoints:
                         timing_split = timing.split(',')
@@ -1453,6 +1463,10 @@ def fuck():
                             cur_timing = timing
                         else:
                             break
+                    
+                    if cur_timing == '':
+                        cur_timing = TimingPoints[0]
+
                     cur_timing = cur_timing.split(',')
                     if i in Obj_times:
                         if kiai_mode == 0:
@@ -1487,7 +1501,7 @@ def fuck():
                     elif (int(obj[3]) & 0b0001 != 0) and (((int(obj[4]) & 0b0010 != 0) or (int(obj[4]) & 0b1000 != 0)) and (int(obj[4]) & 0b0100 == 0)):
                         Obj_blue.append(int(obj[2]))
 
-                for i in range(start_convert + 1, end_convert - 1, interval):
+                for i in range(start_convert, end_convert, interval):
                     skip = False
                     cur_timing = ''
                     for timing in TimingPoints:
@@ -2070,26 +2084,39 @@ def summon():
         if not os.path.isfile(file_select.get()):
             raise Exception(file_not_exist)
         
-        if generate_time == '':
+        timing_points = []
+        if generate_time == '' and len(select) == 0:
             raise Exception(gtime_not_filled)   # 生成时间未填写
+        elif not generate_time == '':
+            if re.match(r'^[0-9]+:[0-9]{2}:[0-9]{3}', generate_time):
+                timing_points.append(int(generate_time.split(':')[0]) * 60000 + int(generate_time.split(':')[1]) * 1000 + int(generate_time.split(':')[2][0:3]))
+            elif re.match(r'^[0-9]+$', generate_time):
+                timing_points.append(int(generate_time))
+            else:
+                raise Exception(gtime_not_correct)  # 生成时间格式不正确
+        if generate_time == '' and not len(select) == 0:
+            timing_points = []
+            for i in sorted(select):
+                if not (int(HitObjects[i-1].split(',')[3]) & 0b0010 != 0) and not (int(HitObjects[i-1].split(',')[3]) & 0b1000 != 0):
+                    timing_points.append(int(HitObjects[i-1].split(',')[2]))
 
-        if re.match(r'^[0-9]+:[0-9]{2}:[0-9]{3}', generate_time):
-            timing_point = int(generate_time.split(':')[0]) * 60000 + int(generate_time.split(':')[1]) * 1000 + int(generate_time.split(':')[2][0:3])
-        elif re.match(r'^[0-9]+$', generate_time):
-            timing_point = int(generate_time)
+        if time_offset.get() == '':
+            pass
         else:
-            raise Exception(gtime_not_correct)  # 生成时间格式不正确
-        
-        if minus1.get() == 1:
-            timing_point -= 1
+            offset = int(time_offset.get())
+            timing_points = [x + offset for x in timing_points]
+            # timing_point = timing_point + int(time_offset.get())
+        # if minus1.get() == 1:
+        #     timing_point -= 1
 
         # 开始生成
         if mode == 0:       # 黄点
-            New_HitObjects.append(','.join(['256', '0'] + [str(timing_point)] + ['2', '0', 'L|256:32,1,-1\n']))
+            for timing_point in timing_points:
+                New_HitObjects.append(','.join(['256', '0'] + [str(timing_point)] + ['2', '0', 'L|256:32,1,-1\n']))
+            
             combine_file()
             init(if_all=True)
             read_file()
-
         elif mode == 1:     # 负黄条
             scale = rhythm_scale.get()  # snapping
             value = rhythm_value.get()  # length
@@ -2100,36 +2127,42 @@ def summon():
             scale = int(scale)
             value = int(value)
 
-            cur_red = ''
-            cur_green = ''
-            cur_timing = ''
-            for timing in TimingPoints:
-                timing_split = timing.split(',')
-                if int(timing_split[0]) <= timing_point:
-                    cur_timing = timing
-                    if timing_split[6] == '1':
-                        cur_red = timing
-                    elif timing_split[6] == '0':
-                        cur_green = timing
+            for timing_point in timing_points:
+                cur_red = ''
+                cur_green = ''
+                cur_timing = ''
+                for timing in TimingPoints:
+                    timing_split = timing.split(',')
+                    if int(timing_split[0]) <= timing_point:
+                        cur_timing = timing
+                        if timing_split[6] == '1':
+                            cur_red = timing
+                        elif timing_split[6] == '0':
+                            cur_green = timing
+                    else:
+                        break
+
+                if cur_timing == '':
+                    cur_timing = TimingPoints[0]
+                    cur_red = TimingPoint_Red[0]
+                    cur_green = TimingPoint_Green[0]
+
+                if int(cur_green.split(',')[0]) < int(cur_red.split(',')[0]):
+                    cur_green = ','.join([str(cur_red.split(',')[0])] + ['-100'] + cur_timing.split(',')[2:6] + ['0'] + cur_timing.split(',')[7])
+
+                # raw_bpm = float(cur_red.split(',')[1])  # beat length
+                raw_sv = float(cur_green.split(',')[1])
+
+                for line in Info:
+                    if str(line).startswith('SliderMultiplier'):
+                        overall_sv = float(str(line).split(':')[1].strip())
+                        break
+
+                slider_length = ( overall_sv * 100 * ( -100 / raw_sv ) / scale ) * -1
+                if big_yellow.get() == 1:
+                    New_HitObjects.append(','.join(['256', '0'] + [str(timing_point)] + ['2', '4', 'L|256:32'] + [str(value)] + [str(slider_length) + '\n']))
                 else:
-                    break
-
-            if int(cur_green.split(',')[0]) < int(cur_red.split(',')[0]):
-                cur_green = ','.join([str(cur_red.split(',')[0])] + ['-100'] + cur_timing.split(',')[2:6] + ['0'] + cur_timing.split(',')[7])
-
-            # raw_bpm = float(cur_red.split(',')[1])  # beat length
-            raw_sv = float(cur_green.split(',')[1])
-
-            for line in Info:
-                if str(line).startswith('SliderMultiplier'):
-                    overall_sv = float(str(line).split(':')[1].strip())
-                    break
-
-            slider_length = ( overall_sv * 100 * ( -100 / raw_sv ) / scale ) * -1
-            if big_yellow.get() == 1:
-                New_HitObjects.append(','.join(['256', '0'] + [str(timing_point)] + ['2', '4', 'L|256:32'] + [str(value)] + [str(slider_length) + '\n']))
-            else:
-                New_HitObjects.append(','.join(['256', '0'] + [str(timing_point)] + ['2', '0', 'L|256:32'] + [str(value)] + [str(slider_length) + '\n']))
+                    New_HitObjects.append(','.join(['256', '0'] + [str(timing_point)] + ['2', '0', 'L|256:32'] + [str(value)] + [str(slider_length) + '\n']))
 
             combine_file()
             init(if_all=True)
@@ -2153,45 +2186,51 @@ def summon():
 
             slider_length = -214.5 - ((( value / scale ) * 140) * multi)
             
-            cur_red = ''
-            cur_green = ''
-            cur_timing = ''
-            for timing in TimingPoints:
-                timing_split = timing.split(',')
-                if int(timing_split[0]) <= timing_point:
-                    cur_timing = timing
-                    if timing_split[6] == '1':
-                        cur_red = timing
-                    elif timing_split[6] == '0':
-                        cur_green = timing
+            for timing_point in timing_points:
+                cur_red = ''
+                cur_green = ''
+                cur_timing = ''
+                for timing in TimingPoints:
+                    timing_split = timing.split(',')
+                    if int(timing_split[0]) <= timing_point:
+                        cur_timing = timing
+                        if timing_split[6] == '1':
+                            cur_red = timing
+                        elif timing_split[6] == '0':
+                            cur_green = timing
+                    else:
+                        break
+
+                if cur_timing == '':
+                    cur_timing = TimingPoints[0]
+                    cur_red = TimingPoint_Red[0]
+                    cur_green = TimingPoint_Green[0]
+
+                if big_yellow.get() == 1:
+                    New_HitObjects.append(','.join(['256', '0'] + [str(timing_point)] + ['2', '4', 'L|256:32'] + ['1'] + [str(slider_length) + '\n']))
                 else:
-                    break
+                    New_HitObjects.append(','.join(['256', '0'] + [str(timing_point)] + ['2', '0', 'L|256:32'] + ['1'] + [str(slider_length) + '\n']))
+                New_TimingPoints_Red.append(','.join([str(timing_point)] + ['1E-320'] + cur_timing.split(',')[2:6] + ['1'] + (['8\n'] if int(cur_timing.split(',')[7]) in [0, 8] else ['9\n'])))           # 这是∞红线
 
-            if big_yellow.get() == 1:
-                New_HitObjects.append(','.join(['256', '0'] + [str(timing_point)] + ['2', '4', 'L|256:32'] + ['1'] + [str(slider_length) + '\n']))
-            else:
-                New_HitObjects.append(','.join(['256', '0'] + [str(timing_point)] + ['2', '0', 'L|256:32'] + ['1'] + [str(slider_length) + '\n']))
-            New_TimingPoints_Red.append(','.join([str(timing_point)] + ['1E-320'] + cur_timing.split(',')[2:6] + ['1'] + (['8\n'] if int(cur_timing.split(',')[7]) in [0, 8] else ['9\n'])))           # 这是∞红线
+                found = False
+                for line in TimingPoint_Red:
+                    line_split = line.split(',')
+                    if timing_point + 1 == int(line_split[0]):
+                        found = True
+                        break
 
-
-            found = False
-            for line in TimingPoint_Red:
-                line_split = line.split(',')
-                if timing_point + 1 == int(line_split[0]):
-                    found = True
-                    break
-
-            if found == False:
-                if int(cur_green.split(',')[0]) < int(cur_red.split(',')[0]):
-                    cur_green = ','.join([str(cur_red.split(',')[0])] + ['-100'] + cur_timing.split(',')[2:6] + ['0'] + cur_timing.split(',')[7])                
-                New_TimingPoints_Red.append(','.join([str(timing_point + 1)] + [str(cur_red.split(',')[1])] + cur_timing.split(',')[2:6] + ['1'] + (['8\n'] if int(cur_timing.split(',')[7]) in [0, 8] else ['9\n'])))
+                if found == False:
+                    if int(cur_green.split(',')[0]) < int(cur_red.split(',')[0]):
+                        cur_green = ','.join([str(cur_red.split(',')[0])] + ['-100'] + cur_timing.split(',')[2:6] + ['0'] + cur_timing.split(',')[7])                
+                    New_TimingPoints_Red.append(','.join([str(timing_point + 1)] + [str(cur_red.split(',')[1])] + cur_timing.split(',')[2:6] + ['1'] + (['8\n'] if int(cur_timing.split(',')[7]) in [0, 8] else ['9\n'])))
 
             combine_file()
             init(if_all=True)
             read_file()
 
         elif mode == 3:
-            New_HitObjects.append(','.join(['256', '192'] + [str(timing_point)] + ['12', '0'] + [str(timing_point + 1)] + ['0:0:0:0:\n']))
+            for timing_point in timing_points:
+                New_HitObjects.append(','.join(['256', '192'] + [str(timing_point)] + ['12', '0'] + [str(timing_point + 1)] + ['0:0:0:0:\n']))
             combine_file()
             init(if_all=True)
             read_file()
@@ -2221,8 +2260,10 @@ def summon_info():
         else:
             raise Exception(gtime_not_correct)  # 生成时间格式不正确
         
-        if minus1.get() == 1:
-            timing_point -= 1
+        if time_offset.get() == '':
+            pass
+        else:
+            timing_point = timing_point + int(time_offset.get())
 
         cur_red = ''
         cur_green = ''
@@ -2386,7 +2427,8 @@ window_lines_help = tk.StringVar(value='How to use?')
 # window_lines_tidy = tk.StringVar(value='Tidy up')
 window_summon_title = tk.StringVar(value='Generate')
 window_rhythm_text = tk.StringVar(value='Length / Snapping: ')
-window_rhythm1_text = tk.StringVar(value=' / ')
+window_plus = tk.StringVar(value='+')
+window_rhythm1_text = tk.StringVar(value='/')
 # window_yellow_bpm = tk.StringVar(value='BPM：')
 # window_yellow_sv = tk.StringVar(value='SV：')
 # window_length_text = tk.StringVar(value='长度：')
@@ -2682,23 +2724,31 @@ summon_list.current(0)
 summon_list.place(x=10, y=60, width=170)
 
 vcmd4 = (root.register(validate_input4), '%P')
+vcmd5 = (root.register(validate_input5), '%P')
 
 # 填空
 yellow_timing_text = Label(summon_area, textvariable=window_yellow_timing, font=font1, bg='gold')
 yellow_timing_text.place(x=190, y=5)
 yellow_timing_value = Entry(summon_area, width=5, validate='key')
-yellow_timing_value.place(x=280, y=8, width=80)
+yellow_timing_value.place(x=270, y=8, width=80)
+
 # -1
-minus1 = IntVar()
-minus1_check = Checkbutton(summon_area, textvariable=window_minus1_text, font=font1, variable=minus1, onvalue=1, offvalue=0, bg='gold', activebackground='gold')
-minus1_check.place(x=365, y=5)
+# minus1 = IntVar()
+# minus1_check = Checkbutton(summon_area, textvariable=window_minus1_text, font=font1, variable=minus1, onvalue=1, offvalue=0, bg='gold', activebackground='gold')
+# minus1_check.place(x=365, y=5)
+
+# offset
+time_offset_plus = Label(summon_area, textvariable=window_plus, font=font1, bg='gold')
+time_offset_plus.place(x=352, y=5)
+time_offset = Entry(summon_area, width=5, validate='key', validatecommand=vcmd5)
+time_offset.place(x=370, y=8, width=40)
 
 rhythm_text = Label(summon_area, textvariable=window_rhythm_text, font=font1, bg='gold')
 rhythm_text.place(x=190, y=35)
 rhythm_value = Entry(summon_area, width=5, validate='key', state='readonly', readonlybackground='darkgray', validatecommand=vcmd3)
 rhythm_value.place(x=310, y=38, width=40)
 rhythm1_text = Label(summon_area, textvariable=window_rhythm1_text, font=font1, bg='gold')
-rhythm1_text.place(x=350, y=35)
+rhythm1_text.place(x=353, y=35)
 rhythm_scale = Entry(summon_area, width=5, validate='key', state='readonly', readonlybackground='darkgray', validatecommand=vcmd4)
 rhythm_scale.place(x=370, y=38, width=40)
 

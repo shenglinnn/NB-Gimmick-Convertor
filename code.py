@@ -148,6 +148,7 @@ Generate_folder = 'Complete! Please check your map folder.'
 skin_added = 'Added! A skin folder has been generated within the current map folder, and you are free to use it as you please!'
 
 gtime_not_filled = 'Please fill the time point or select some notes.'
+gtime_not_filled_info = 'Please fill the time point.'
 gtime_not_correct = 'The time format is incorrect, you can directly copy the time point in the game and paste it here.'
 scale_value_not_fill = 'Please fill the length / snapping.'
 info_time = 'Time point: '
@@ -160,6 +161,7 @@ info_14_len = '1/4 slider length: '
 info_13_len = '1/3 slider length: '
 info_15_len = '1/5 slider length: '
 info_17_len = '1/7 slider length: '
+no_lines_here = 'No line at this time point, please choose another time point.'
 
 def CN():
     global welcome_text, didnt_choose_file, file_not_exist, gimmick_help_str1, gimmick_help_str2, lines_help_str0, summon_help_str1, summon_help_str2, choose_file_title, choose_file_file, read_file_mode, read_file_mode0, no_red_lines, time_not_full, stime_not_correct, etime_not_correct, stime_etime, stime_etime_equal, execute_no_objects, execute_bpm_big, execute_bpm_small, first_object, red_or_green_line, red_3_not_0, green_range, no_objects_in_range, red_range, delete_line, tidy, adjust_done, red_changed, done
@@ -167,7 +169,7 @@ def CN():
     global font1, font_warning, font2, font3, font_clear, font_language
     global volume_not_full, volume_range_not_correct, base_bpm_not_filled, base_bpm_big, base_bpm_small
     global window_summon_title, window_rhythm_text, window_yellow_timing, window_summon_GO, window_summon_help, window_summon_Info, window_minus1_text, window_big_yellow_text, window_multiplier_text, window_reload_text, window_skin_file_text
-    global gtime_not_filled, gtime_not_correct, scale_value_not_fill, info_time, info_bpm, info_beatlen, info_sv, info_slidermultiplier, info_11_len, info_14_len, info_13_len, info_15_len, info_17_len
+    global gtime_not_filled, gtime_not_filled_info, gtime_not_correct, scale_value_not_fill, info_time, info_bpm, info_beatlen, info_sv, info_slidermultiplier, info_11_len, info_14_len, info_13_len, info_15_len, info_17_len, no_lines_here
     global reload_OK, Generate_folder, skin_added
 
     welcome_text = '''你好喵 (๑•̀ω•́)ノ
@@ -255,6 +257,7 @@ def CN():
     base_bpm_small = '基础 BPM 太小啦，最小不能小于 1 呢~'
 
     gtime_not_filled = '先填入时间点或者选择一些note吧~'
+    gtime_not_filled_info = '先填入时间点吧~'
     gtime_not_correct = '时间格式有误，你可以直接在游戏中复制时间点然后粘贴在这里哦（￣︶￣）'
     scale_value_not_fill = '滑条长度 / 节拍还没写呢~'
     info_time = '时间点：'
@@ -267,6 +270,7 @@ def CN():
     info_13_len = '1/3 滑条长度：'
     info_15_len = '1/5 滑条长度：'
     info_17_len = '1/7 滑条长度：'
+    no_lines_here = '该时间点没有线，请换一处。'
 
     window_now_selected.set('当前选择：')
     window_choose_file.set('选择文件')
@@ -335,7 +339,7 @@ def EN():
     global font1, font_warning, font2, font3, font_clear, font_language
     global volume_not_full, volume_range_not_correct, base_bpm_not_filled, base_bpm_big, base_bpm_small
     global window_summon_title, window_rhythm_text, window_yellow_timing, window_summon_GO, window_summon_help, window_summon_Info, window_minus1_text, window_big_yellow_text, window_multiplier_text, window_reload_text, window_skin_file_text
-    global gtime_not_filled, gtime_not_correct, scale_value_not_fill, info_time, info_bpm, info_beatlen, info_sv, info_slidermultiplier, info_11_len, info_14_len, info_13_len, info_15_len, info_17_len
+    global gtime_not_filled, gtime_not_filled_info, gtime_not_correct, scale_value_not_fill, info_time, info_bpm, info_beatlen, info_sv, info_slidermultiplier, info_11_len, info_14_len, info_13_len, info_15_len, info_17_len, no_lines_here
     global reload_OK, Generate_folder, skin_added
 
     welcome_text = '''Hello!\n
@@ -424,6 +428,7 @@ Note: Functions 2 and 3 are more advanced, and it is recommended to use them aft
     skin_added = 'Added! A skin folder has been generated within the current map folder, and you are free to use it as you please!'
 
     gtime_not_filled = 'Please fill the time point or select some notes.'
+    gtime_not_filled_info = 'Please fill the time point.'
     gtime_not_correct = 'The time format is incorrect, you can directly copy the time point in the game and paste it here.'
     scale_value_not_fill = 'Please fill the length / snapping.'
     info_time = 'Time point: '
@@ -436,6 +441,7 @@ Note: Functions 2 and 3 are more advanced, and it is recommended to use them aft
     info_13_len = '1/3 slider length: '
     info_15_len = '1/5 slider length: '
     info_17_len = '1/7 slider length: '
+    no_lines_here = 'No line at this time point, please choose another time point.'
 
     window_now_selected.set('Current:')
     window_choose_file.set('Open File')
@@ -2251,7 +2257,7 @@ def summon_info():
             raise Exception(file_not_exist)
         
         if generate_time == '':
-            raise Exception(gtime_not_filled)   # 生成时间未填写
+            raise Exception(gtime_not_filled_info)   # 生成时间未填写
 
         if re.match(r'^[0-9]+:[0-9]{2}:[0-9]{3}', generate_time):
             timing_point = int(generate_time.split(':')[0]) * 60000 + int(generate_time.split(':')[1]) * 1000 + int(generate_time.split(':')[2][0:3])
@@ -2279,20 +2285,24 @@ def summon_info():
             else:
                 break
 
-        if int(cur_green.split(',')[0]) < int(cur_red.split(',')[0]):
-            cur_green = ','.join([str(cur_red.split(',')[0])] + ['-100'] + cur_timing.split(',')[2:6] + ['0'] + cur_timing.split(',')[7])
+        if not cur_timing == '':                    
+            if int(cur_green.split(',')[0]) < int(cur_red.split(',')[0]):
+                cur_green = ','.join([str(cur_red.split(',')[0])] + ['-100'] + cur_timing.split(',')[2:6] + ['0'] + cur_timing.split(',')[7])
 
-        raw_bpm = float(cur_red.split(',')[1])  # beat length
-        raw_sv = float(cur_green.split(',')[1])
+            raw_bpm = float(cur_red.split(',')[1])  # beat length
+            raw_sv = float(cur_green.split(',')[1])
 
-        for line in Info:
-            if str(line).startswith('SliderMultiplier'):
-                overall_sv = float(str(line).split(':')[1].strip())
-                break
+            for line in Info:
+                if str(line).startswith('SliderMultiplier'):
+                    overall_sv = float(str(line).split(':')[1].strip())
+                    break
 
-        slider_11 = -10000 * overall_sv / raw_sv
-        text = f'{info_time}{timing_point}\n\n{info_bpm}{(60000/raw_bpm):.6f}\n{info_beatlen}{raw_bpm}\n\n{info_sv}{(-100/raw_sv):.6f}\n{info_slidermultiplier}{overall_sv}\n\n{info_11_len}{slider_11:.4f}\n{info_14_len}{(slider_11)/4:.4f}\n{info_13_len}{(slider_11)/3:.4f}\n{info_15_len}{(slider_11)/5:.4f}\n{info_17_len}{(slider_11)/7:.4f}'
-        log_add_msg(text)
+            slider_11 = -10000 * overall_sv / raw_sv
+            text = f'{info_time}{timing_point}\n\n{info_bpm}{(60000/raw_bpm):.6f}\n{info_beatlen}{raw_bpm}\n\n{info_sv}{(-100/raw_sv):.6f}\n{info_slidermultiplier}{overall_sv}\n\n{info_11_len}{slider_11:.4f}\n{info_14_len}{(slider_11)/4:.4f}\n{info_13_len}{(slider_11)/3:.4f}\n{info_15_len}{(slider_11)/5:.4f}\n{info_17_len}{(slider_11)/7:.4f}'
+            log_add_msg(text)
+
+        else:
+            log_add_msg(no_lines_here)
 
     except Exception as e:
         log_add_msg(e)

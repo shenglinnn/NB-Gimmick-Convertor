@@ -932,7 +932,7 @@ def read_file():
                     break
             
             if int(TimingPoint_Red[0].split(',')[0]) < int(TimingPoint_Green[0].split(',')[0]):
-                TimingPoint_Green.insert(0, ','.join([str(TimingPoint_Red[0].split(',')[0])] + ['-100'] + TimingPoint_Green[0].split(',')[2:]))
+                TimingPoint_Green.insert(0, ','.join([str(TimingPoint_Red[0].split(',')[0])] + ['-100'] + TimingPoint_Red[0].split(',')[2:6] + ['0'] + (['0\n'] if int(TimingPoint_Red[0].split(',')[7]) in [0, 8] else ['1\n'])))
             if int(HitObjects[0].split(',')[2]) < int(TimingPoint_Red[0].split(',')[0]):
                 TimingPoint_Red.insert(0, ','.join([str(HitObjects[0].split(',')[2])] + TimingPoint_Red[0].split(',')[1:]))
                 TimingPoint_Green.insert(0, ','.join([str(HitObjects[0].split(',')[2])] +['100'] + TimingPoint_Green[0].split(',')[2:]))

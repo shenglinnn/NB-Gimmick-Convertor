@@ -9,6 +9,7 @@ import re
 import base64
 import os
 import locale
+import math
 
 # import traceback
 
@@ -60,6 +61,9 @@ line_value_list_cn = ['插入：SV绿线', '插入：密集红线', '插入：�
 
 summon_list_en = ['Yellow Note', 'Negative Yellow Slider', 'Static Yellow Note', 'Spinner Note (V1 Only)']
 summon_list_cn = ['黄点', '负长度黄条', '静态黄点', '转盘音符（仅适用V1）']
+
+sv_list = ['linear', 'exp', '-exp', 'inv', 'sin', 'x^3']
+# sv_list = ['arithmetic', 'geometric', 'harmonic', 'trigonometric']  (by ThomasZQY)
 
 ################## English Text
 welcome_text = '''Hello!\n
@@ -520,9 +524,18 @@ def switch_language():
         k_method_select.current(0)
         D_method_select.current(0)
         K_method_select.current(0)
-        red_interval.delete(0, tk.END)
-        red_don.delete(0, tk.END)
-        red_kat.delete(0, tk.END)
+        # red_interval.delete(0, tk.END)
+        # red_don.delete(0, tk.END)
+        # red_kat.delete(0, tk.END)
+        range_start.configure(state=tk.NORMAL)
+        range_end.configure(state=tk.NORMAL)
+        volume_start.configure(state=tk.NORMAL)
+        volume_end.configure(state=tk.NORMAL)
+        kiai_auto.configure(state=tk.NORMAL)
+        kiai_off.configure(state=tk.NORMAL)
+        kiai_on.configure(state=tk.NORMAL)
+        base_bpm.configure(state='readonly')
+        exp.config(state='readonly')
         red_interval.configure(state='readonly')
         red_don.configure(state='readonly')
         red_kat.configure(state='readonly')
@@ -553,9 +566,18 @@ def switch_language():
         k_method_select.current(0)
         D_method_select.current(0)
         K_method_select.current(0)
-        red_interval.delete(0, tk.END)
-        red_don.delete(0, tk.END)
-        red_kat.delete(0, tk.END)
+        # red_interval.delete(0, tk.END)
+        # red_don.delete(0, tk.END)
+        # red_kat.delete(0, tk.END)
+        range_start.configure(state=tk.NORMAL)
+        range_end.configure(state=tk.NORMAL)
+        volume_start.configure(state=tk.NORMAL)
+        volume_end.configure(state=tk.NORMAL)
+        kiai_auto.configure(state=tk.NORMAL)
+        kiai_off.configure(state=tk.NORMAL)
+        kiai_on.configure(state=tk.NORMAL)
+        base_bpm.configure(state='readonly')
+        exp.config(state='readonly')
         red_interval.configure(state='readonly')
         red_don.configure(state='readonly')
         red_kat.configure(state='readonly')
@@ -752,6 +774,7 @@ def red_setting_entry(event):
         kiai_auto.configure(state=tk.NORMAL)
         kiai_on.configure(state=tk.NORMAL)
         kiai_off.configure(state=tk.NORMAL)
+        exp.config(state='readonly')
     else:
         range_start.configure(state='readonly')
         range_end.configure(state='readonly')
@@ -760,6 +783,7 @@ def red_setting_entry(event):
         kiai_auto.configure(state=tk.DISABLED)
         kiai_on.configure(state=tk.DISABLED)
         kiai_off.configure(state=tk.DISABLED)
+        exp.config(state='disable')
 
 def summon_entry(event):
     a = summon_list.current()
@@ -1328,6 +1352,10 @@ def fuck():
                 if range_Obj == []:
                     raise Exception(no_objects_in_range)
                 
+                # if exp == 1:
+                #     exp_a = math.log(value_from)
+                #     exp_b = math.log(value_to)
+
                 for line in range_Obj:
                     cur_time = int(line.split(',')[2])
                     cur_timing = ''
@@ -1338,8 +1366,23 @@ def fuck():
                             cur_timing = timing
                         else:
                             break
+                    
                     cur_timing = cur_timing.split(',')
-                    new_value = (((cur_time - start_convert) / (end_convert - start_convert)) * (value_to - value_from)) + value_from
+                    
+                    if exp.current() == 0:
+                        new_value = (((cur_time - start_convert) / (end_convert - start_convert)) * (value_to - value_from)) + value_from
+                    elif exp.current() == 1:
+                        # new_value = math.exp((((cur_time - start_convert) / (end_convert - start_convert)) * (math.log(value_to) - math.log(value_from))) + math.log(value_from))
+                        new_value = value_from * math.pow(value_to / value_from, (cur_time - start_convert) / (end_convert - start_convert))
+                    elif exp.current() == 2:
+                        new_value = value_from + ((value_to - value_from) * ((cur_time - start_convert) / (end_convert - start_convert))**(0.5 if value_to >= value_from else 2))
+                    elif exp.current() == 3:
+                        new_value = ((1 / value_from) + (((1 / value_to) - (1 / value_from)) * ((cur_time - start_convert) / (end_convert - start_convert)))) ** -1
+                    elif exp.current() == 4:
+                        new_value = ((value_from + value_to) / 2) - ((value_to - value_from) / 2) * math.cos((math.pi * (cur_time - start_convert)) / (end_convert - start_convert))
+                    else:
+                        new_value = (4 * (value_to - value_from) / (end_convert - start_convert)**3 * (cur_time - ((start_convert + end_convert) / 2))**3) + ((value_from + value_to) / 2)
+
                     if auto_volume == False:
                         new_volume = int((((cur_time - start_convert) / (end_convert - start_convert)) * (int(volume_to) - int(volume_from))) + int(volume_from))
                     
@@ -1354,7 +1397,7 @@ def fuck():
                 init(if_all=True)
                 read_file()
             elif mode == 3:     # 需要间隔
-                value_add = (value_to - value_from) / ((end_convert - start_convert) / interval)
+                # value_add = (value_to - value_from) / ((end_convert - start_convert) / interval)
                 if auto_volume == False:
                     volume_add = float((int(volume_to) - int(volume_from)) / ((end_convert - start_convert) / interval))
                 add_times = 0
@@ -1372,12 +1415,30 @@ def fuck():
                         cur_timing = TimingPoints[0]
                     
                     cur_timing = cur_timing.split(',')
+
+                    # new_value = (value_add * add_times) + value_from
+                    # new_value = (((i - start_convert) / (end_convert - start_convert)) * (value_to - value_from)) + value_from
+
+                    if exp.current() == 0:
+                        new_value = (((i - start_convert) / (end_convert - start_convert)) * (value_to - value_from)) + value_from
+                    elif exp.current() == 1:
+                        # new_value = math.exp((((cur_time - start_convert) / (end_convert - start_convert)) * (math.log(value_to) - math.log(value_from))) + math.log(value_from))
+                        new_value = value_from * math.pow(value_to / value_from, (i - start_convert) / (end_convert - start_convert))
+                    elif exp.current() == 2:
+                        new_value = value_from + ((value_to - value_from) * ((i - start_convert) / (end_convert - start_convert))**(0.5 if value_to >= value_from else 2))
+                    elif exp.current() == 3:
+                        new_value = ((1 / value_from) + (((1 / value_to) - (1 / value_from)) * ((i - start_convert) / (end_convert - start_convert)))) ** -1
+                    elif exp.current() == 4:
+                        new_value = ((value_from + value_to) / 2) - ((value_to - value_from) / 2) * math.cos((math.pi * (i - start_convert)) / (end_convert - start_convert))
+                    else:
+                        new_value = (4 * (value_to - value_from) / (end_convert - start_convert)**3 * (i - ((start_convert + end_convert) / 2))**3) + ((value_from + value_to) / 2)
+
                     if kiai_mode == 0:
-                        New_TimingPoints_Green.append(','.join([str(i)] + [str((-100) / ((value_add * add_times) + value_from))] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['0'] + (['0\n'] if int(cur_timing[7]) in [0, 8] else ['1\n'])))
+                        New_TimingPoints_Green.append(','.join([str(i)] + [str((-100) / new_value)] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['0'] + (['0\n'] if int(cur_timing[7]) in [0, 8] else ['1\n'])))
                     elif kiai_mode == 1:
-                        New_TimingPoints_Green.append(','.join([str(i)] + [str((-100) / ((value_add * add_times) + value_from))] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['0'] + ['0\n']))
+                        New_TimingPoints_Green.append(','.join([str(i)] + [str((-100) / new_value)] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['0'] + ['0\n']))
                     elif kiai_mode == 2:
-                        New_TimingPoints_Green.append(','.join([str(i)] + [str((-100) / ((value_add * add_times) + value_from))] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['0'] + ['1\n']))
+                        New_TimingPoints_Green.append(','.join([str(i)] + [str((-100) / new_value)] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['0'] + ['1\n']))
 
                     add_times += 1
                 
@@ -1425,7 +1486,23 @@ def fuck():
                             break
                     cur_timing = cur_timing.split(',')
                     cur_red = cur_red.split(',')
-                    new_value = ((((cur_time - start_convert) / (end_convert - start_convert)) * (bpm_value_to - bpm_value_from)) + bpm_value_from) / (60000 /float(cur_red[1]))
+                    
+                    # new_value = ((((cur_time - start_convert) / (end_convert - start_convert)) * (bpm_value_to - bpm_value_from)) + bpm_value_from) / (60000 /float(cur_red[1]))
+                    
+                    if exp.current() == 0:
+                        new_value = ((((cur_time - start_convert) / (end_convert - start_convert)) * (bpm_value_to - bpm_value_from)) + bpm_value_from) / (60000 /float(cur_red[1]))
+                    elif exp.current() == 1:
+                        # new_value = math.exp((((cur_time - start_convert) / (end_convert - start_convert)) * (math.log(value_to) - math.log(value_from))) + math.log(value_from))
+                        new_value = (bpm_value_from * math.pow(bpm_value_to / bpm_value_from, (cur_time - start_convert) / (end_convert - start_convert))) / (60000 /float(cur_red[1]))
+                    elif exp.current() == 2:
+                        new_value = (bpm_value_from + ((bpm_value_to - bpm_value_from) * ((cur_time - start_convert) / (end_convert - start_convert))**(0.5 if bpm_value_to >= bpm_value_from else 2))) / (60000 /float(cur_red[1]))
+                    elif exp.current() == 3:
+                        new_value = (((1 / bpm_value_from) + (((1 / bpm_value_to) - (1 / bpm_value_from)) * ((cur_time - start_convert) / (end_convert - start_convert)))) ** -1) / (60000 /float(cur_red[1]))
+                    elif exp.current() == 4:
+                        new_value = (((bpm_value_from + bpm_value_to) / 2) - ((bpm_value_to - bpm_value_from) / 2) * math.cos((math.pi * (cur_time - start_convert)) / (end_convert - start_convert))) / (60000 /float(cur_red[1]))
+                    else:
+                        new_value = ((4 * (bpm_value_to - bpm_value_from) / (end_convert - start_convert)**3 * (cur_time - ((start_convert + end_convert) / 2))**3) + ((bpm_value_from + bpm_value_to) / 2)) / (60000 /float(cur_red[1]))
+
                     if auto_volume == False:
                         new_volume = int((((cur_time - start_convert) / (end_convert - start_convert)) * (int(volume_to) - int(volume_from))) + int(volume_from))
                     
@@ -1457,9 +1534,9 @@ def fuck():
                     Obj_str.append(line)
             # 密集红线
             if mode == 1:
-                value_add = ((interval / (end_convert - start_convert - 2)) * (value_to - value_from))
+                # value_add = ((interval / (end_convert - start_convert)) * (value_to - value_from))
                 if auto_volume == False:
-                    volume_add = float((int(volume_to) - int(volume_from)) / ((end_convert - start_convert - 2) / interval))
+                    volume_add = float((int(volume_to) - int(volume_from)) / ((end_convert - start_convert) / interval))
                 add_times = 0
                 for i in range(start_convert, end_convert, interval):
                     cur_timing = ''
@@ -1474,20 +1551,37 @@ def fuck():
                         cur_timing = TimingPoints[0]
 
                     cur_timing = cur_timing.split(',')
+
+                    # new_value = (((i - start_convert) / (end_convert - start_convert)) * (value_to - value_from)) + value_from
+
+                    if exp.current() == 0:
+                        new_value = (((i - start_convert) / (end_convert - start_convert)) * (value_to - value_from)) + value_from
+                    elif exp.current() == 1:
+                        # new_value = math.exp((((cur_time - start_convert) / (end_convert - start_convert)) * (math.log(value_to) - math.log(value_from))) + math.log(value_from))
+                        new_value = value_from * math.pow(value_to / value_from, (i - start_convert) / (end_convert - start_convert))
+                    elif exp.current() == 2:
+                        new_value = value_from + ((value_to - value_from) * ((i - start_convert) / (end_convert - start_convert))**(0.5 if value_to >= value_from else 2))
+                    elif exp.current() == 3:
+                        new_value = ((1 / value_from) + (((1 / value_to) - (1 / value_from)) * ((i - start_convert) / (end_convert - start_convert)))) ** -1
+                    elif exp.current() == 4:
+                        new_value = ((value_from + value_to) / 2) - ((value_to - value_from) / 2) * math.cos((math.pi * (i - start_convert)) / (end_convert - start_convert))
+                    else:
+                        new_value = (4 * (value_to - value_from) / (end_convert - start_convert)**3 * (i - ((start_convert + end_convert) / 2))**3) + ((value_from + value_to) / 2)
+
                     if i in Obj_times:
                         if kiai_mode == 0:
-                            New_TimingPoints_Red.append(','.join([str(i + 1)] + [str(60000 / ((value_add * add_times) + value_from))] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['1'] + (['0\n'] if int(cur_timing[7]) in [0, 8] else ['1\n'])))
+                            New_TimingPoints_Red.append(','.join([str(i + 1)] + [str(60000 / new_value)] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['1'] + (['0\n'] if int(cur_timing[7]) in [0, 8] else ['1\n'])))
                         elif kiai_mode == 1:
-                            New_TimingPoints_Red.append(','.join([str(i + 1)] + [str(60000 / ((value_add * add_times) + value_from))] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['1'] + ['0\n']))
+                            New_TimingPoints_Red.append(','.join([str(i + 1)] + [str(60000 / new_value)] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['1'] + ['0\n']))
                         elif kiai_mode == 2:
-                            New_TimingPoints_Red.append(','.join([str(i + 1)] + [str(60000 / ((value_add * add_times) + value_from))] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['1'] + ['1\n']))
+                            New_TimingPoints_Red.append(','.join([str(i + 1)] + [str(60000 / new_value)] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['1'] + ['1\n']))
                     else:
                         if kiai_mode == 0:
-                            New_TimingPoints_Red.append(','.join([str(i)] + [str(60000 / ((value_add * add_times) + value_from))] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['1'] + (['0\n'] if int(cur_timing[7]) in [0, 8] else ['1\n'])))
+                            New_TimingPoints_Red.append(','.join([str(i)] + [str(60000 / new_value)] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['1'] + (['0\n'] if int(cur_timing[7]) in [0, 8] else ['1\n'])))
                         elif kiai_mode == 1:
-                            New_TimingPoints_Red.append(','.join([str(i)] + [str(60000 / ((value_add * add_times) + value_from))] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['1'] + ['0\n']))
+                            New_TimingPoints_Red.append(','.join([str(i)] + [str(60000 / new_value)] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['1'] + ['0\n']))
                         elif kiai_mode == 2:
-                            New_TimingPoints_Red.append(','.join([str(i)] + [str(60000 / ((value_add * add_times) + value_from))] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['1'] + ['1\n']))
+                            New_TimingPoints_Red.append(','.join([str(i)] + [str(60000 / new_value)] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['1'] + ['1\n']))
                     add_times += 1
                 combine_file()
                 init(if_all=True)
@@ -1527,12 +1621,27 @@ def fuck():
                                 break
                     if not skip:
                         cur_timing = cur_timing.split(',')
+
+                        if exp.current() == 0:
+                            new_value = (((i - start_convert) / (end_convert - start_convert)) * (value_to - value_from)) + value_from
+                        elif exp.current() == 1:
+                            # new_value = math.exp((((cur_time - start_convert) / (end_convert - start_convert)) * (math.log(value_to) - math.log(value_from))) + math.log(value_from))
+                            new_value = value_from * math.pow(value_to / value_from, (i - start_convert) / (end_convert - start_convert))
+                        elif exp.current() == 2:
+                            new_value = value_from + ((value_to - value_from) * ((i - start_convert) / (end_convert - start_convert))**(0.5 if value_to >= value_from else 2))
+                        elif exp.current() == 3:
+                            new_value = ((1 / value_from) + (((1 / value_to) - (1 / value_from)) * ((i - start_convert) / (end_convert - start_convert)))) ** -1
+                        elif exp.current() == 4:
+                            new_value = ((value_from + value_to) / 2) - ((value_to - value_from) / 2) * math.cos((math.pi * (i - start_convert)) / (end_convert - start_convert))
+                        else:
+                            new_value = (4 * (value_to - value_from) / (end_convert - start_convert)**3 * (i - ((start_convert + end_convert) / 2))**3) + ((value_from + value_to) / 2)
+
                         if kiai_mode == 0:
-                            New_TimingPoints_Red.append(','.join([str(i)] + [str(60000 / ((value_add * add_times) + value_from))] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['1'] + (['0\n'] if int(cur_timing[7]) in [0, 8] else ['1\n'])))
+                            New_TimingPoints_Red.append(','.join([str(i)] + [str(60000 / new_value)] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['1'] + (['0\n'] if int(cur_timing[7]) in [0, 8] else ['1\n'])))
                         elif kiai_mode == 1:
-                            New_TimingPoints_Red.append(','.join([str(i)] + [str(60000 / ((value_add * add_times) + value_from))] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['1'] + ['0\n']))
+                            New_TimingPoints_Red.append(','.join([str(i)] + [str(60000 / new_value)] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['1'] + ['0\n']))
                         elif kiai_mode == 2:
-                            New_TimingPoints_Red.append(','.join([str(i)] + [str(60000 / ((value_add * add_times) + value_from))] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['1'] + ['1\n']))
+                            New_TimingPoints_Red.append(','.join([str(i)] + [str(60000 / new_value)] + cur_timing[2:5] + ([cur_timing[5]] if auto_volume else [str(int((volume_add * add_times) + int(volume_from)))]) + ['1'] + ['1\n']))
                     add_times += 1
                 combine_file()
                 init(if_all=True)
@@ -2429,6 +2538,7 @@ window_kiai_auto = tk.StringVar(value='Auto')
 window_kiai_off = tk.StringVar(value='Off')
 window_kiai_on = tk.StringVar(value='On')
 window_base_on_bpm = tk.StringVar(value='Base BPM:')
+window_exp = tk.StringVar(value='Exp SV')
 window_red_settings = tk.StringVar(value='Settings: ( Interval | Don range | Kat range )')
 window_default = tk.StringVar(value='Default: ( 3 | 3 | 9 )')
 window_lines_GO = tk.StringVar(value='GO!')
@@ -2617,9 +2727,9 @@ line_area_title.place(x=10, y=10, width=260, height=50)
 line_method_text = Label(line_area, textvariable=window_lines_method, font=font1, bg='pink')
 line_method_text.place(x=10, y=60)
 
-insert_sel_var = tk.StringVar()
+# insert_sel_var = tk.StringVar()
 # line_value_list = ['插入：SV绿线', '插入：密集红线', '插入：反色小节线Gimmick', '插入：密集绿线', '插入：SV绿线（依据BPM）', '清除：绿线', '清除：红线', '清除：全部']
-line_value = ttk.Combobox(line_area,textvariable=insert_sel_var, values=line_value_list_en, font=font1, state='readonly')
+line_value = ttk.Combobox(line_area, values=line_value_list_en, font=font1, state='readonly')
 line_value.current(0)
 line_value.place(x=10, y=90, width=260)
 
@@ -2684,7 +2794,18 @@ kiai_on.place(x=220, y=165)
 base_bpm_text = Label(line_area, textvariable=window_base_on_bpm, font=font1, bg='pink')
 base_bpm_text.place(x=10, y=190)
 base_bpm = Entry(line_area, width=10, validate='key', state='readonly', readonlybackground='darkgray', validatecommand=vcmd)
-base_bpm.place(x=80, y=193, width=120)
+base_bpm.place(x=80, y=193, width=70)
+
+# SV，变量就用exp吧（
+sv_text = Label(line_area, text='SV:', font=font1, bg='pink')
+sv_text.place(x=160, y=190)
+
+exp = ttk.Combobox(line_area, values=sv_list, font=font1, state='readonly')
+exp.current(0)
+exp.place(x=190, y=190, width=70)
+# exp = IntVar()
+# exp_check = Checkbutton(line_area, textvariable=window_exp, font=font1, variable=exp, onvalue=1, offvalue=0, bg='pink',  activebackground='pink')
+# exp_check.place(x=200, y=190)
 
 # 红线设置
 red_settings = Label(line_area, textvariable=window_red_settings, font=font1, bg='pink')
@@ -2728,8 +2849,8 @@ summon_area_title = Label(summon_area, textvariable=window_summon_title, font=fo
 summon_area_title.place(x=10, y=5, width=170, height=50)
 
 # 生成选单
-summon_sel_var = tk.StringVar()
-summon_list = ttk.Combobox(summon_area, textvariable=summon_sel_var, values=summon_list_en, font=font1, state='readonly')   # summon_list_en
+# summon_sel_var = tk.StringVar()
+summon_list = ttk.Combobox(summon_area, values=summon_list_en, font=font1, state='readonly')   # summon_list_en
 summon_list.current(0)
 summon_list.place(x=10, y=60, width=170)
 

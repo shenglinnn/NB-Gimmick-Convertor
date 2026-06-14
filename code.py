@@ -2424,7 +2424,8 @@ def reload_file():
         else:
             init(if_all=True)
             read_file()
-            log_add_msg(reload_OK)
+            if file_select.get() != '':
+                log_add_msg(reload_OK)
 
     except Exception as e:
         log_add_msg(e)

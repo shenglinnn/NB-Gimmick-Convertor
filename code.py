@@ -2263,7 +2263,7 @@ def summon():
                     cur_green = TimingPoint_Green[0]
 
                 if int(cur_green.split(',')[0]) < int(cur_red.split(',')[0]):
-                    cur_green = ','.join([str(cur_red.split(',')[0])] + ['-100'] + cur_timing.split(',')[2:6] + ['0'] + cur_timing.split(',')[7])
+                    cur_green = ','.join([str(cur_red.split(',')[0])] + ['-100'] + cur_timing.split(',')[2:6] + ['0'] + [cur_timing.split(',')[7]])
 
                 # raw_bpm = float(cur_red.split(',')[1])  # beat length
                 raw_sv = float(cur_green.split(',')[1])

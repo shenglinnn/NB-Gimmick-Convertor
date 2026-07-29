@@ -11,7 +11,7 @@ import os
 import locale
 import math
 
-# import traceback
+import traceback
 
 # 图标
 icon = '''
@@ -2335,8 +2335,8 @@ def summon():
                         break
 
                 if found == False:
-                    if int(cur_green.split(',')[0]) < int(cur_red.split(',')[0]):
-                        cur_green = ','.join([str(cur_red.split(',')[0])] + ['-100'] + cur_timing.split(',')[2:6] + ['0'] + cur_timing.split(',')[7])                
+                    # if int(cur_green.split(',')[0]) < int(cur_red.split(',')[0]):
+                    #     New_TimingPoints_Green.append(','.join([str(timing_point + 1)] + ['-100'] + cur_timing.split(',')[2:6] + ['0'] + [cur_timing.split(',')[7]]))                
                     New_TimingPoints_Red.append(','.join([str(timing_point + 1)] + [str(cur_red.split(',')[1])] + cur_timing.split(',')[2:6] + ['1'] + (['8\n'] if int(cur_timing.split(',')[7]) in [0, 8] else ['9\n'])))
 
             combine_file()
@@ -2352,7 +2352,7 @@ def summon():
 
     except Exception as e:
         log_add_msg(e)
-        # traceback.print_exc()
+        traceback.print_exc()
 
 # 信息
 def summon_info():

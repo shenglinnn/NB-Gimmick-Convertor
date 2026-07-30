@@ -2227,7 +2227,10 @@ def summon():
         # 开始生成
         if mode == 0:       # 黄点
             for timing_point in timing_points:
-                New_HitObjects.append(','.join(['256', '0'] + [str(timing_point)] + ['2', '0', 'L|256:32,1,-1\n']))
+                if big_yellow.get() == 1:
+                    New_HitObjects.append(','.join(['256', '0'] + [str(timing_point)] + ['2', '4', 'L|256:32,1,-1\n']))
+                else:
+                    New_HitObjects.append(','.join(['256', '0'] + [str(timing_point)] + ['2', '0', 'L|256:32,1,-1\n']))
             
             combine_file()
             init(if_all=True)

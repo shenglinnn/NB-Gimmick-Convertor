@@ -11,7 +11,7 @@ import os
 import locale
 import math
 
-import traceback
+# import traceback
 
 # 图标
 icon = '''
@@ -2352,7 +2352,7 @@ def summon():
 
     except Exception as e:
         log_add_msg(e)
-        traceback.print_exc()
+        # traceback.print_exc()
 
 # 信息
 def summon_info():
@@ -2396,7 +2396,7 @@ def summon_info():
 
         if not cur_timing == '':                    
             if int(cur_green.split(',')[0]) < int(cur_red.split(',')[0]):
-                cur_green = ','.join([str(cur_red.split(',')[0])] + ['-100'] + cur_timing.split(',')[2:6] + ['0'] + cur_timing.split(',')[7])
+                cur_green = ','.join([str(cur_red.split(',')[0])] + ['-100'] + cur_timing.split(',')[2:6] + ['0'] + [cur_timing.split(',')[7]])
 
             raw_bpm = float(cur_red.split(',')[1])  # beat length
             raw_sv = float(cur_green.split(',')[1])
@@ -2415,6 +2415,7 @@ def summon_info():
 
     except Exception as e:
         log_add_msg(e)
+        # traceback.print_exc()
 
 # 重读
 def reload_file():
